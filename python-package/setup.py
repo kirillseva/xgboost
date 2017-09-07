@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # import subprocess
 sys.path.insert(0, '.')
 
-CURRENT_DIR = os.path.dirname(__file__)
+CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # We can not import `xgboost.libpath` in setup.py directly since xgboost/__init__.py
 # import `xgboost.core` and finally will import `numpy` and `scipy` which are setup
@@ -17,6 +17,7 @@ libpath = {'__file__': libpath_py}
 exec(compile(open(libpath_py, "rb").read(), libpath_py, 'exec'), libpath, libpath)
 
 LIB_PATH = libpath['find_lib_path']()
+LIB_PATH = [os.path.relpath(LIB_PATH[0], CURRENT_DIR)]
 print("Install libxgboost from: %s" % LIB_PATH)
 # Please use setup_pip.py for generating and deploying pip installation
 # detailed instruction in setup_pip.py
